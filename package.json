@@ -1,0 +1,15 @@
+{
+  "name": "js-events",
+  "version": "1.0.0",
+  "description": "javascript events",
+  "main": "html/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matheus Molinari",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.4.1",
+    "popmotion": "^8.7.1"
+  }
+}

@@ -14,20 +14,26 @@
     {id:10, name : "Title 10", color:"#26413C"},
   ]
 
-  arr.slice(0,initial -1).map((item,idx) => {
+  arr.slice(0,initial).map((item,idx) => {
     var div = document.createElement("div");
     $(div).addClass(`tab tab-${item.id}`)
+    if(initial === item.id){
+      $(div).addClass(`box-active`)
+    }
     $(div).click(action)
     $(div).data("id",item.id)
     $(div).css({"background-color":item.color, "color": "#fff"})
     var textnode = document.createTextNode(item.name);
     $(div).append(textnode)
-    $(".events-container-past").append(div); 
+    $(".events-container-past").append(div);
   })
 
-  arr.slice(initial - 1,arr.length + 1).map((item,idx) => {
+  arr.slice(initial,arr.length + 1).map((item,idx) => {
     var div = document.createElement("div");
     $(div).addClass(`tab tab-${item.id}`)
+    if(initial === item.id){
+      $(div).addClass(`box-active`)
+    }
     $(div).click(action)
     $(div).data("id",item.id)
     $(div).css({"background-color":item.color, "color": "#fff"})
@@ -36,24 +42,23 @@
     $(".events-container").append(div); 
   })
  
-
   function setTop (start){
     if(start !== 0){
       var count = start;
       var i = count
-      var mtCount = 1;
-      while (i > 0) {
+      var mtCount = 0;
+      while (i >= 0) {
         $(`.tab-${i}`).css("margin-top", mt * mtCount)
-        i--
         mtCount++;
+        i--
       }
   
       var count2 = arr.length - start;
-      var x = count2
-      mtCount = 1;
-      while (x < arr.length +1) {
-        $(`.tab-${x}`).css("margin-top", mt * mtCount)
-        mtCount++;
+      var x = count2;
+      var newMtCount = 0;
+      while (x <= arr.length) {
+        $(`.tab-${x}`).css("margin-top", mt * newMtCount)
+        newMtCount++;
         x++
       }
     }
@@ -62,22 +67,22 @@
   setTop(initial)
 
   function action(event){
-    const element = $(event.target)  
-    setTop(element.data("id"))
-      if(element.hasClass("tab")){
-        const box = $(".box-active")
-        box.addClass("tab")
-        box.addClass("transition-unactive")
-        box.removeClass("box-active")
-        element.addClass("transition-active");
-        setTimeout(() => {
-          element.addClass("box-active")
-          element.removeClass("transition-active")
-          box.removeClass("transition-unactive")
-          element.removeClass("tab")
-        }
-        ,1500)
+    const element = $(event.target)
+    if(element.hasClass("tab")){
+      const box = $(".box-active")
+      box.addClass("tab")
+      box.addClass("transition-unactive")
+      box.removeClass("box-active")
+      element.addClass("transition-active");
+      setTop(element.data("id"))
+      setTimeout(() => {
+        element.addClass("box-active")
+        element.removeClass("transition-active")
+        box.removeClass("transition-unactive")
+        element.removeClass("tab")
       }
+      ,1500)
     }
+  }
 
 

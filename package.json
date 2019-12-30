@@ -9,7 +9,6 @@
   "author": "Matheus Molinari",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.4.1",
-    "popmotion": "^8.7.1"
+    "jquery": "^3.4.1"
   }
 }

@@ -5,8 +5,8 @@ body {
   margin: 0;
 }
 
-body > h1 {
-  margin-left: 1rem;
+h1 {
+  margin-left: 2.2rem;
   margin-bottom: 2rem;
 }
 
@@ -14,10 +14,41 @@ body > h1 {
   display: flex;
 }
 
+.container-action {
+  display: flex;
+  justify-content: space-between;
+  margin: 5em 2em 5em 2em;
+}
+
+.dropdown {
+  width: 200px;
+  position: relative;
+}
+
+.dropdown select {
+  display: inline-block;
+  width: 100%;
+  min-width: 10em;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  white-space: normal;
+  background: none;
+  line-height: 1.26em;
+  font-size: 16px;
+  line-height: 2.2;
+  outline: 0;
+  cursor: pointer;
+  border-radius: 0;
+  /* -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; */
+  font-size: 19px;
+}
+
 .box-arrow {
   display: flex;
-  justify-content: flex-end;
-  margin-right: 2em;
 }
 
 .box-arrow > img {
@@ -53,13 +84,13 @@ body > h1 {
 
 .tab {
   cursor: pointer;
-  transition: 1s;
+  transition: 1.5s;
 }
 
 .tab > div {
   writing-mode: tb;
   margin: 1rem auto 0 auto;
-  transition: 1s;
+  transition: 1.5s;
 }
 
 .box-active {

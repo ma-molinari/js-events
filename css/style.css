@@ -7,10 +7,31 @@ body {
 
 body > h1 {
   margin-left: 1rem;
+  margin-bottom: 2rem;
 }
 
 .wrapper {
   display: flex;
+}
+
+.box-arrow {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2em;
+}
+
+.box-arrow > img {
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.box-arrow > img:hover {
+  opacity: 0.5;
+}
+
+.arrow-left {
+  transform: rotate(180deg);
+  margin-right: 1em;
 }
 
 .events-container {
@@ -20,10 +41,6 @@ body > h1 {
 
 .events-container-past {
   display: flex;
-}
-
-.group-active {
-  /* width: 90%; */
 }
 
 .notShow {
@@ -36,28 +53,42 @@ body > h1 {
 
 .tab {
   cursor: pointer;
-  transition: 1.5s;
+  transition: 1s;
+}
+
+.tab > div {
+  writing-mode: tb;
+  margin: 1rem auto 0 auto;
+  transition: 1s;
 }
 
 .box-active {
   cursor: pointer;
-  /* min-width: 990px; */
   width: 58.333333333333336vw !important;
 }
 
+.box-active > div {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  writing-mode: inherit;
+  transition: 1.5s;
+}
+
 .transition-active {
-  -webkit-animation: active 1.5s infinite;
-  animation: active 1.5s infinite;
+  -webkit-animation: active 1.5s;
+  animation: active 1.5s;
 }
 
 .transition-unactive {
-  -webkit-animation: unactive 1.5s infinite;
-  animation: unactive 1.5s infinite;
+  -webkit-animation: unactive 1.5s;
+  animation: unactive 1.5s;
 }
 
 .group-unactive {
-  -webkit-animation: groupUnactive 1.5s infinite;
-  animation: groupUnactive 1.5s infinite;
+  -webkit-animation: groupUnactive 1.5s;
+  animation: groupUnactive 1.5s;
 }
 
 @keyframes active {

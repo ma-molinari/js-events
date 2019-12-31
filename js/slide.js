@@ -36,9 +36,10 @@ const arr = [
 const mt = 40;
 let initial = 20;
 let total = arr.length;
+let selectId = initial;
 
 const createPast = (dynamicStart, defaultValue) => {
-  arr.slice(dynamicStart, defaultValue).map((item, idx) => {
+  arr.slice(dynamicStart, defaultValue).map(item => {
     var div = document.createElement("div");
     $(div).addClass(`tab tab-${item.id} notShow`);
     if (initial === item.id) {
@@ -50,16 +51,14 @@ const createPast = (dynamicStart, defaultValue) => {
     });
     $(div).click(action);
     $(div).data("id", item.id);
-    var textnode = document.createTextNode(item.name);
-    $(div).append(textnode);
+    $(div).append(`<div>${item.name}</div>`);
     $(`.tab-${item.id}`).css("width", "0px");
-
     $(".events-container-past").append(div);
   });
 };
 
 const componentsHidden = (init, end) => {
-  arr.slice(init, end).map((item, idx) => {
+  arr.slice(init, end).map(item => {
     $(`.tab-${item.id}`).css({
       color: "#fff",
       overflow: "hidden",
@@ -69,13 +68,9 @@ const componentsHidden = (init, end) => {
 };
 
 const componentsShow = (init, end) => {
-  arr.slice(init, end).map((item, idx) => {
-    $(`.tab-${item.id}`).addClass("groupActive");
+  arr.slice(init, end).map(item => {
     $(`.tab-${item.id}`).addClass("show");
     $(`.tab-${item.id}`).removeClass("notShow");
-    setTimeout(() => {
-      $(`.tab-${item.id}`).removeClass("groupActive");
-    }, 1500);
     $(`.tab-${item.id}`).css({
       color: "#fff",
       overflow: "auto",
@@ -106,15 +101,28 @@ function setTop(start) {
   }
 }
 
+$(".arrow-left").click(() => {
+  $(`.tab`).removeClass("box-active");
+  setTop(selectId - 1);
+  $(`.tab-${selectId - 1}`).addClass("box-active");
+  goLeft(selectId - 1);
+});
+
+$(".arrow-right").click(() => {
+  $(`.tab`).removeClass("box-active");
+  setTop(selectId + 1);
+  $(`.tab-${selectId + 1}`).addClass("box-active");
+  goLeft(selectId + 1);
+});
+
 const goLeft = id => {
-  // if (id <= initial) {
   let diff = initial - id;
   let init = initial - 6 - diff;
+  selectId = id;
 
   componentsHidden(0, init < 0 ? 0 : init);
   componentsHidden(initial + 5 - diff, total);
   componentsShow(init < 0 ? 0 : init, initial + 5 - diff);
-  // }
 };
 
 const goRight = id => {
@@ -122,10 +130,7 @@ const goRight = id => {
     let diff = Math.abs(initial - id);
     let end = initial + 6 + diff;
     let init = initial - 6 + diff;
-
-    console.log("diff", diff);
-    console.log(end - 1);
-    // console.log("init", init);
+    selectId = id;
 
     componentsHidden(0, init < 0 ? 0 : init);
     componentsShow(
@@ -142,7 +147,7 @@ setTop(initial);
 
 function action(event) {
   const element = $(event.target);
-  if (element.hasClass("tab")) {
+  if (element.hasClass("tab") && element.data("id") !== selectId) {
     goLeft(element.data("id"));
     goRight(element.data("id"));
     const box = $(".box-active");
@@ -151,11 +156,10 @@ function action(event) {
     box.removeClass("box-active");
     element.addClass("transition-active");
     setTop(element.data("id"));
+    element.addClass("box-active");
     setTimeout(() => {
-      element.addClass("box-active");
       element.removeClass("transition-active");
       box.removeClass("transition-unactive");
-      element.removeClass("tab");
     }, 1500);
   }
 }

@@ -51,14 +51,38 @@ const createPast = (dynamicStart, defaultValue) => {
     });
     $(div).click(action);
     $(div).data("id", item.id);
-    $(div).append(`<div>${item.name}</div>`);
+    $(div).append(`
+    <div>
+      <div class="container-title">
+        <div>
+          ${item.name}
+        </div>
+        <div class="arrow-inside-content">
+          <img src="../assets/arrow.svg" class="arrow-left insideL${
+            item.id
+          }"></img>
+          <img src="../assets/arrow.svg" class="arrow-right insideR${
+            item.id
+          }"></img>
+        </div>
+      </div>
+    </div>`);
     $(`.tab-${item.id}`).css("width", "0px");
     $(".events-container-past").append(div);
+
+    $(`.insideL${item.id}`).click(() => {
+      arrowL();
+    });
+
+    $(`.insideR${item.id}`).click(() => {
+      arrowR();
+    });
   });
 };
 
 const componentsHidden = (init, end) => {
   arr.slice(init, end).map(item => {
+    $(`.tab-${item.id}`).addClass("notShow");
     $(`.tab-${item.id}`).css({
       color: "#fff",
       overflow: "hidden",
@@ -101,40 +125,6 @@ function setTop(start) {
   }
 }
 
-$(".arrow-left").click(() => {
-  if (selectId > 1) {
-    let id = selectId - 1;
-    if (selectId > 1) {
-      $(`.tab`).removeClass("box-active");
-      setTop(id);
-      $(".select-drop").val(selectId);
-      $(`.tab-${id}`).addClass("box-active");
-      goLeft(id);
-    }
-  }
-});
-
-$(".arrow-right").click(() => {
-  if (selectId < arr.length) {
-    let id = selectId + 1;
-    selectId = id;
-    $(`.tab`).removeClass("box-active");
-    $(`.tab-${id}`).addClass("box-active");
-
-    let end = selectId + 6;
-    let init = selectId - 6;
-
-    setTop(id);
-    $(".select-drop").val(selectId);
-
-    componentsHidden(0, init < 0 ? 0 : init);
-    componentsShow(
-      init > arr.length ? arr.length : init,
-      end > arr.length ? arr.length : end - 1
-    );
-  }
-});
-
 const goLeft = id => {
   let diff = initial - id;
   let init = initial - 6 - diff;
@@ -167,14 +157,71 @@ arr.map(item => {
     $(".select-drop").append(
       `<option selected value="${item.id}">${item.name}</option>`
     );
+    $(".select-drop-mobile").append(
+      `<option selected value="${item.id}">${item.name}</option>`
+    );
   } else {
     $(".select-drop").append(
+      `<option value="${item.id}">${item.name}</option>`
+    );
+    $(".select-drop-mobile").append(
       `<option value="${item.id}">${item.name}</option>`
     );
   }
 });
 
+function arrowL() {
+  if (selectId > 1) {
+    let top = $(".container-action").height();
+    $("html, body").animate({ scrollTop: top }, "50");
+
+    let id = selectId - 1;
+    if (selectId > 1) {
+      $(`.tab`).removeClass("box-active");
+      setTop(id);
+      $(".select-drop").val(selectId);
+      $(`.tab-${id}`).addClass("box-active");
+      goLeft(id);
+    }
+  }
+}
+
+function arrowR() {
+  let top = $(".container-action").height();
+  $("html, body").animate({ scrollTop: top }, "50");
+  if (selectId < arr.length) {
+    console.log(selectId);
+    let id = selectId + 1;
+    selectId = id;
+    $(`.tab`).removeClass("box-active");
+    $(`.tab-${id}`).addClass("box-active");
+
+    let end = selectId + 6;
+    let init = selectId - 6;
+
+    setTop(id);
+    $(".select-drop").val(selectId);
+
+    componentsHidden(0, init < 0 ? 0 : init);
+    componentsShow(
+      init > arr.length ? arr.length : init,
+      end > arr.length ? arr.length : end - 1
+    );
+  }
+}
+
+$(".arrow-left").click(() => {
+  arrowL();
+});
+
+$(".arrow-right").click(() => {
+  arrowR();
+});
+
 function handleDrop(id) {
+  let top = $(".container-action").height();
+  $("html, body").animate({ scrollTop: top }, "50");
+
   selectId = id;
   let element = $(`.tab-${id}`);
   goLeft(id);
@@ -183,10 +230,6 @@ function handleDrop(id) {
   box.removeClass("box-active");
   setTop(id);
   element.addClass("box-active");
-  element.addClass("transition-active");
-  setTimeout(() => {
-    element.removeClass("transition-active");
-  }, 1500);
 }
 
 $(".select-drop").change(function(e) {
@@ -202,19 +245,15 @@ setTop(initial);
 function action(event) {
   const element = $(event.target);
   if (element.hasClass("tab") && element.data("id") !== selectId) {
+    let top = $(".container-action").height();
+    $("html, body").animate({ scrollTop: top }, "50");
     goLeft(element.data("id"));
     goRight(element.data("id"));
     $(".select-drop").val(selectId);
     const box = $(".box-active");
     box.addClass("tab");
-    box.addClass("transition-unactive");
     box.removeClass("box-active");
-    element.addClass("transition-active");
     setTop(element.data("id"));
     element.addClass("box-active");
-    setTimeout(() => {
-      element.removeClass("transition-active");
-      box.removeClass("transition-unactive");
-    }, 1500);
   }
 }

@@ -12,6 +12,8 @@ h1 {
 
 .wrapper {
   display: flex;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .container-action {
@@ -41,9 +43,6 @@ h1 {
   outline: 0;
   cursor: pointer;
   border-radius: 0;
-  /* -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none; */
   font-size: 19px;
 }
 
@@ -63,11 +62,6 @@ h1 {
 .arrow-left {
   transform: rotate(180deg);
   margin-right: 1em;
-}
-
-.events-container {
-  display: flex;
-  min-height: 500px;
 }
 
 .events-container-past {
@@ -94,63 +88,69 @@ h1 {
 }
 
 .box-active {
-  cursor: pointer;
-  width: 58.333333333333336vw !important;
+  cursor: auto;
 }
 
 .box-active > div {
-  margin-top: 1rem;
-  text-align: center;
+  margin: 2rem;
   font-size: 1.5rem;
-  font-weight: bold;
   writing-mode: inherit;
   transition: 1.5s;
 }
 
-.transition-active {
-  -webkit-animation: active 1.5s;
-  animation: active 1.5s;
+.arrow-inside-content {
+  display: flex;
+}
+.arrow-inside-content img {
+  z-index: 9999 !important;
+  cursor: pointer;
 }
 
-.transition-unactive {
-  -webkit-animation: unactive 1.5s;
-  animation: unactive 1.5s;
+.container-title {
+  display: flex;
+  justify-content: space-between;
 }
 
-.group-unactive {
-  -webkit-animation: groupUnactive 1.5s;
-  animation: groupUnactive 1.5s;
-}
-
-@keyframes active {
-  0% {
-    top: 0px;
-    width: 55px;
+@media (min-width: 1000px) {
+  .box-active {
+    width: 58.333333333333336vw !important;
   }
-  100% {
-    top: 0;
-    width: 58.333333333333336vw;
+
+  .arrow-inside-content {
+    display: none !important;
   }
 }
 
-@keyframes unactive {
-  0% {
-    top: 0px;
-    width: 58.333333333333336vw;
+@media (max-width: 1000px) {
+  .container-action {
+    display: flex;
+    flex-direction: column;
+    margin: 5em 2em 2em 2em;
   }
-  100% {
-    top: 0;
-    width: 55px;
-  }
-}
 
-@keyframes groupActive {
-  0% {
-    top: 0px;
-    width: 0px;
+  .dropdown {
+    width: 100% !important;
+    position: relative;
+    margin-bottom: 1em;
   }
-  100% {
-    top: 0;
-    width: 55px;
+
+  .show {
+    width: 0px !important;
+  }
+
+  .box-active {
+    width: 100vw !important;
+  }
+
+  .box-active > div {
+    display: block !important;
+  }
+
+  .box-arrow {
+    display: none;
+  }
+
+  .tab > div {
+    display: none;
   }
 }

@@ -52,31 +52,47 @@ const createPast = (dynamicStart, defaultValue) => {
     $(div).click(action);
     $(div).data("id", item.id);
     $(div).append(`
-    <div>
-      <div class="container-title">
-        <div>
-          ${item.name}
+      <div class="container-content">
+        <div class="container-title">
+          <div class="title-num">No. ${item.id} </div>
+          <div class="title">${item.name}</div>
         </div>
-        <div class="arrow-inside-content">
-          <img src="../assets/arrow.svg" class="arrow-left insideL${
-            item.id
-          }"></img>
-          <img src="../assets/arrow.svg" class="arrow-right insideR${
-            item.id
-          }"></img>
+        <div class="center-button">
+          <div class="button btn-buy">buy issue</div>
+          <div class="button btn-download">Download</div>
+          <div class="button-colorful btn-more" style="color:${
+            item.color
+          }">Learn More</div>
+        </div>
+        <div class="center">
+          <div class="title-list">Essays</div>
+          <ul>
+            <li>
+              <div>After Climate Despair</div>
+              <div>Matt Frost argues for energy abundance in a warming world</div>
+            </li>
+            <li>
+              <div>After Climate Despair</div>
+              <div>Matt Frost argues for energy abundance in a warming world</div>
+            </li>
+            <li>
+              <div>After Climate Despair</div>
+              <div>Matt Frost argues for energy abundance in a warming world</div>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>`);
+    `);
     $(`.tab-${item.id}`).css("width", "0px");
     $(".events-container-past").append(div);
-
-    $(`.insideL${item.id}`).click(() => {
-      arrowL();
+    $(`.tab-${item.id} > .container-content`).click(e => {
+      $(`.tab-${item.id}`).click(action);
     });
 
-    $(`.insideR${item.id}`).click(() => {
-      arrowR();
-    });
+    $(`.tab-${item.id}`).on("touchstart", handleTouchStart);
+    $(`.tab-${item.id}`).on("touchmove", handleTouchMove);
+
+    $(".wrapper").css("height", $(".box-active").height());
   });
 };
 
@@ -130,6 +146,7 @@ const goLeft = id => {
   let init = initial - 6 - diff;
   selectId = id;
   $(".select-drop").val(selectId);
+  $(".wrapper").css("height", $(".box-active").height());
 
   componentsHidden(0, init < 0 ? 0 : init);
   componentsHidden(initial + 5 - diff, total);
@@ -143,6 +160,7 @@ const goRight = id => {
     let init = initial - 6 + diff;
     selectId = id;
     $(".select-drop").val(selectId);
+    $(".wrapper").css("height", $(".box-active").height());
 
     componentsHidden(0, init < 0 ? 0 : init);
     componentsShow(
@@ -174,33 +192,33 @@ function arrowL() {
   if (selectId > 1) {
     let top = $(".container-action").height();
     $("html, body").animate({ scrollTop: top }, "50");
+    $(".wrapper").css("height", $(".box-active").height());
 
     let id = selectId - 1;
-    if (selectId > 1) {
-      $(`.tab`).removeClass("box-active");
-      setTop(id);
-      $(".select-drop").val(selectId);
-      $(`.tab-${id}`).addClass("box-active");
-      goLeft(id);
-    }
+    $(`.tab`).removeClass("box-active");
+    setTop(id);
+    $(".select-drop").val(selectId);
+    $(`.tab-${id}`).addClass("box-active");
+    goLeft(id);
   }
 }
 
 function arrowR() {
-  let top = $(".container-action").height();
-  $("html, body").animate({ scrollTop: top }, "50");
   if (selectId < arr.length) {
-    console.log(selectId);
+    let top = $(".container-action").height();
+    $("html, body").animate({ scrollTop: top }, "50");
+    $(".wrapper").css("height", $(".box-active").height());
+
     let id = selectId + 1;
-    selectId = id;
-    $(`.tab`).removeClass("box-active");
+    $(`.tab-${selectId}`).removeClass("box-active");
+    setTop(id);
+    $(".select-drop").val(selectId);
     $(`.tab-${id}`).addClass("box-active");
+
+    selectId = id;
 
     let end = selectId + 6;
     let init = selectId - 6;
-
-    setTop(id);
-    $(".select-drop").val(selectId);
 
     componentsHidden(0, init < 0 ? 0 : init);
     componentsShow(
@@ -221,6 +239,7 @@ $(".arrow-right").click(() => {
 function handleDrop(id) {
   let top = $(".container-action").height();
   $("html, body").animate({ scrollTop: top }, "50");
+  $(".wrapper").css("height", $(".box-active").height());
 
   selectId = id;
   let element = $(`.tab-${id}`);
@@ -243,10 +262,11 @@ componentsShow(initial - 6, total - initial > 5 ? initial + 5 : total); //items 
 setTop(initial);
 
 function action(event) {
-  const element = $(event.target);
+  const element = $(event.currentTarget);
   if (element.hasClass("tab") && element.data("id") !== selectId) {
     let top = $(".container-action").height();
     $("html, body").animate({ scrollTop: top }, "50");
+    $(".wrapper").css("height", $(".box-active").height());
     goLeft(element.data("id"));
     goRight(element.data("id"));
     $(".select-drop").val(selectId);
@@ -256,4 +276,56 @@ function action(event) {
     setTop(element.data("id"));
     element.addClass("box-active");
   }
+}
+
+var xDown = null;
+var yDown = null;
+
+function getTouches(evt) {
+  return (
+    evt.touches || evt.originalEvent.touches // browser API
+  ); // jQuery
+}
+
+function handleTouchStart(evt) {
+  const firstTouch = getTouches(evt)[0];
+  xDown = firstTouch.clientX;
+  yDown = firstTouch.clientY;
+  console.log(xDown, yDown);
+}
+
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+
+  // console.log(evt.touches[0])
+
+  var xUp = evt.touches[0].clientX;
+  var yUp = evt.touches[0].clientY;
+
+  console.log(xUp, yUp);
+
+  var xDiff = xDown - xUp;
+  var yDiff = yDown - yUp;
+
+  // console.log(xDiff, yDiff)
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    /*most significant*/
+    if (xDiff > 0) {
+      /* left swipe */
+      arrowR();
+
+      // alert("left");
+    } else {
+      /* right swipe */
+      arrowL();
+
+      // alert("right");
+    }
+  }
+  /* reset values */
+  xDown = null;
+  yDown = null;
 }
